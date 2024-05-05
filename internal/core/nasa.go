@@ -1,6 +1,6 @@
 package core
 
-type NASAResponse struct {
+type NasaAPIResponse struct {
 	Total            int                       `json:"element_count"`
 	NearEarthObjects map[string][]NasaNEObject `json:"near_earth_objects"`
 }

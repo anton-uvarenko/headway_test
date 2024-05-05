@@ -10,7 +10,7 @@ import (
 
 var ErrParsingTime = errors.New("pkg.NasaRespNoCliResp error parsing time")
 
-func NasaRespToCliResp(resp *core.NASAResponse) (*core.CliResponse, error) {
+func NasaRespToCliResp(resp *core.NasaAPIResponse) (*core.CliResponse, error) {
 	result := &core.CliResponse{
 		Total: resp.Total,
 	}
