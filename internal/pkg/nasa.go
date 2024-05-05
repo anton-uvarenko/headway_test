@@ -51,7 +51,7 @@ func FetchLastSevenDays() error {
 	for i := range 7 {
 		go func(wg *sync.WaitGroup) {
 			defer wg.Done()
-			date := time.Now().Add(-time.Hour * 24).Add(-time.Hour * 24 * time.Duration(i+1))
+			date := time.Now().Add(-time.Hour * 24 * time.Duration(i+1))
 			data, err := FetchFromNasaApi(date)
 			if err != nil {
 				fmt.Println(err)
