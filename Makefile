@@ -1,3 +1,3 @@
 start:
-	go build -o ./app ./cmd/app/main.go
+	go build -o ./app ./main.go
 	./app
