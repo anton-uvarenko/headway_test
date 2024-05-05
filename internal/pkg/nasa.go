@@ -15,8 +15,9 @@ import (
 var (
 	ErrPerformingRquest = errors.New("error performing request to NASA")
 	ErrNasaInternal     = errors.New("error Nasa's internal error")
-	ErrBadInvalidAPIKey = errors.New("error invalid api key")
+	ErrInvalidAPIKey    = errors.New("error invalid api key")
 	ErrUnknown          = errors.New("error unknown")
+	ErrDecodingResponse = errors.New("error decoding response")
 )
 
 type NasaAPI struct {
@@ -48,7 +49,7 @@ func (c NasaAPI) FetchFromNasaApi(date time.Time) (*core.NasaAPIResponse, error)
 	case resp.StatusCode == http.StatusOK:
 		break
 	case resp.StatusCode == http.StatusForbidden:
-		return nil, fmt.Errorf("%w: %d", ErrBadInvalidAPIKey, resp.StatusCode)
+		return nil, fmt.Errorf("%w: %d", ErrInvalidAPIKey, resp.StatusCode)
 	case resp.StatusCode >= 500:
 		return nil, fmt.Errorf("%w: %d", ErrNasaInternal, resp.StatusCode)
 	default:
@@ -56,7 +57,10 @@ func (c NasaAPI) FetchFromNasaApi(date time.Time) (*core.NasaAPIResponse, error)
 	}
 
 	var result core.NasaAPIResponse
-	json.NewDecoder(resp.Body).Decode(&result)
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return nil, ErrDecodingResponse
+	}
 
 	return &result, nil
 }

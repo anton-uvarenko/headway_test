@@ -1,6 +1,8 @@
 package pkg
 
-import "github.com/anton-uvarenko/headway_test/internal/core"
+import (
+	"github.com/anton-uvarenko/headway_test/internal/core"
+)
 
 func CollectData(dataCh <-chan *core.NasaAPIResponse, errCh <-chan error) (*core.CliResponse, error) {
 	result := &core.CliResponse{}
@@ -18,7 +20,10 @@ func CollectData(dataCh <-chan *core.NasaAPIResponse, errCh <-chan error) (*core
 			result.Total += cliResp.Total
 			result.NearEarthObjects = append(result.NearEarthObjects, cliResp.NearEarthObjects...)
 
-		case err := <-errCh:
+		case err, ok := <-errCh:
+			if !ok {
+				continue
+			}
 			return nil, err
 		}
 	}
